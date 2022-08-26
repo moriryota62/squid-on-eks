@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: squid
+  name: squid
+  namespace: kube-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: squid
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: squid
+    spec:
+      containers:
+      - image: ryotamori/squid:alpine-3.16.1
+        name: squid
+        securityContext:
+          readOnlyRootFilesystem: true
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "250m"
+        volumeMounts:
+        - mountPath: /etc/squid/squid.conf
+          name: config
+          subPath: squid.conf
+        - mountPath: /etc/squid/whitelist
+          name: whitelist
+          subPath: whitelist
+        - mountPath: /var/run
+          name: run
+      volumes:
+      - name: config
+        configMap:
+          name: squid-conf
+      - name: whitelist
+        configMap:
+          name: squid-whitelist
+      - name: run
+        emptyDir: {}
+status: {}

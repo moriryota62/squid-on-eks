@@ -1,0 +1,9 @@
+apiVersion: v1
+data:
+  whitelist: |
+    .amazonaws.com
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: squid-whitelist
+  namespace: kube-system

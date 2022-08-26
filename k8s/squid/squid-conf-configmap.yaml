@@ -1,0 +1,82 @@
+apiVersion: v1
+data:
+  squid.conf: |-
+    #
+    # Recommended Squid configuration:
+    #
+
+    #
+    # 許可設定:
+    # 上から順に有効化されていくので最後にDeny設定を記載する
+    #
+    # IPv4優先
+    # dns_v4_first on
+
+    # IPアドレス定義（接続元のIPアドレスを指定)
+    acl localnet src 192.168.0.0/16  # From Local IPAddress
+
+    # ポート80、443以外のHTTP通信を拒否する
+    acl Safe_ports port 80          # http
+    acl Safe_ports port 443         # https
+    http_access deny !Safe_ports
+
+    # SSLの場合、ポート443以外のHTTP通信を拒否する
+    acl SSL_ports port 443          # https
+    acl CONNECT method CONNECT
+    http_access deny CONNECT !SSL_ports
+
+    # ホワイトリストを指定
+    acl whitelist dstdomain "/etc/squid/whitelist"
+
+    # 接続元IPアドレス外の通信を拒否
+    http_access deny !localnet
+
+    # ホワイトリストで定義したURLへのアクセスを許可する
+    http_access allow whitelist
+
+    # これまで定義した以外のアクセスはすべて拒否する
+    http_access deny all
+
+    #
+    # 基本設定:
+    # Squidの基本設定:
+    #
+    # デフォルトのSquid使用ポート
+    http_port 3128
+
+    # キャッシュを用いない
+    no_cache deny all
+    cache_mem 0 MB # メモリ圧迫させたくないのでcacheしない
+    cache_store_log none # cacheしない場合はlogging必要なし
+
+    # access.logのフォーマット（ローカル時間 送信元IP リクエストステータス レスポンスサイズ リクエストメソッド リクエストURL ユーザ名 階層コード コンテンツタイプ）
+    # logformat log %tl %>a %Ss/%03>Hs %<st %rm %ru %[un %Sh/%<a %mt
+    logformat log %{%Y/%m/%d %H:%M:%S}tl| %>a %Ss/%03>Hs %<st %rm %ru %[un %Sh/%<a %mt
+    
+    # LBのヘルスチェック等、リクエストのないものをログから除外する
+    acl hasRequest has request
+    access_log none !hasRequest
+
+    # アクセスログを標準出力
+    cache_log stdio:/dev/stdout log
+    access_log stdio:/dev/stdout log
+
+    #
+    # セキュリティ設定:
+    # 必須では無いが余程の理由がない限り設定しておくこと
+    #
+    # ホスト名の秘匿
+    visible_hostname unknown
+
+    # プロキシ情報の秘匿
+    forwarded_for off
+    request_header_access User-Agent deny all
+    request_header_access Referer deny all
+    request_header_access X-Forwarded-For deny all
+    request_header_access Via deny all
+    request_header_access Cache-Control deny all
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: squid-conf
+  namespace: kube-system
