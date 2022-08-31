@@ -1,6 +1,6 @@
 # Squid on EKS
 
-セキュリティ対策等でVPCからのアウトバウンドを絞りたい場合があります。最近では[AWS Network Firewall](https://aws.amazon.com/jp/network-firewall/)もありますが、HTTPのHostヘッダやSNIのserver_nameを任意の値に変えると任意の宛先に出れてしまうようです。そのため、VPCからのアウトバウンドをより厳しく絞りたい場合、VPCにフォワードプロキシを建てます。
+セキュリティ対策等でVPCからのアウトバウンドを絞りたい場合があります。最近では[AWS Network Firewall](https://aws.amazon.com/jp/network-firewall/)もありますが、HTTPのHostヘッダやSNIのserver_nameを変えると任意の宛先に出れてしまうようです。そのため、VPCからのアウトバウンドをより厳しく絞りたい場合、VPCにフォワードプロキシを建てます。
 
 VPC内にフォワードプロキシを建てる方法は多々ありますが、EKSのFargateでSquidのフォワードプロキシを建てる方法を解説します。
 
@@ -12,7 +12,7 @@ VPC内にフォワードプロキシを建てる方法は多々ありますが�
 
 # 全体像
 
-EKS FargateでSquidのPodを動かします。このPodはVPC内部のNLBで公開します。VPC内部のプロキシを経由してインターネットへ出たいサービスはこのNLBのDNS名をプロキシサーバーとして指定します。Squid PodはNAT Gatewayを経由してインターネットへ出ます。
+EKS FargateでSquidのPodを動かします。このPodはVPC内部のNLBで公開します。プロキシを経由してインターネットへ出たいサービスはこのNLBのDNS名をプロキシサーバーとして指定します。Squid PodはNAT Gatewayを経由してインターネットへ出ます。
 
 絵貼る
 
@@ -77,7 +77,7 @@ Squidをデプロイします。[k8s/squid](https://github.com/moriryota62/squid
 
 ## 6. 動作確認
 
-1. テスト様にNginxのPodを起動します。
+1. テスト用にNginxのPodを起動します。
 
 ``` sh
 $ kubectl run nginx --image=nginx

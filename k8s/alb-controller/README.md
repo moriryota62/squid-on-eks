@@ -7,7 +7,7 @@
 ## デプロイ
 
 - `sa.yaml`のannotationsにあるIAMのARNを修正する。
-- マニフェストのapply
+- マニフェストのapply　(`clusterName`、`region`、`vpcId`は環境に合わせて変えてください。)
 
 ``` sh
 kubectl apply -f sa.yaml
