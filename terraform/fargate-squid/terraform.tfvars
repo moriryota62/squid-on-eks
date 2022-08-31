@@ -1,4 +1,4 @@
-base_name = "squid"
+base_name = "mirror-dev"
 app_name  = "squid"
 namespace = "kube-system"
 labels    = { "app" = "squid" }

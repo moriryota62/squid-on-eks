@@ -5,4 +5,4 @@ metadata:
   name: aws-load-balancer-controller
   namespace: kube-system
   annotations:
-    eks.amazonaws.com/role-arn: arn:aws:iam::456247448888:role/squid-SAIAM-kube-system-aws-load-balancer-controller
+    eks.amazonaws.com/role-arn: arn:aws:iam::457247553832:role/mirror-dev-SAIAM-kube-system-aws-load-balancer-controller

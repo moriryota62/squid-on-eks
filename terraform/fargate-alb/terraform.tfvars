@@ -1,4 +1,4 @@
-base_name = "squid"
+base_name = "mirror-dev"
 app_name  = "alb-controller"
 namespace = "kube-system"
 labels    = { "app.kubernetes.io/name" = "aws-load-balancer-controller" }

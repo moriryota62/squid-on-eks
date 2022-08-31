@@ -37,7 +37,7 @@ provider "aws" {
   region = "ap-northeast-1"
   default_tags {
     tags = {
-      pj    = "squid"
+      pj    = "mirror"
       env   = "dev"
       owner = "mori"
     }
@@ -80,25 +80,25 @@ Squidをデプロイします。[k8s/squid](https://github.com/moriryota62/squid
 1. テスト用にNginxのPodを起動します。
 
 ``` sh
-$ kubectl run nginx --image=nginx
+$ kubectl run nginx --image=nginx -n kube-system -l app=squid
 ```
 
 2. NginxのPodに入ります。
 
 ``` sh
-$ kubectl exec -it nginx -- /bin/sh
+$ kubectl exec -it nginx -n kube-system -- /bin/sh
 ```
 
 3. 以下のようにプロキシを指定してcurlを実行します。whitelistで許可したドメインには問題なくアクセスできます。
 
 ``` sh
-> curl https://www.tis.co.jp -x http://<NLB DNS>:3128
+> curl https://www.tis.co.jp -x http://k8s-kubesyst-squid-9805ffda40-3605941818c5eae9.elb.ap-south-1.amazonaws.com:3128
 ```
 
 4. 以下のようにプロキシを指定してcurlを実行します。whitelistで許可していないドメインにはアクセスできません。
 
 ``` sh
-> curl https://www.google.com -x http://<NLB DNS>:3128
+> curl https://www.google.com -x http://k8s-kubesyst-squid-9805ffda40-3605941818c5eae9.elb.ap-south-1.amazonaws.com:3128
 ```
 
 5. Nginx Podから抜けます。
@@ -112,4 +112,7 @@ $ kubectl exec -it nginx -- /bin/sh
 ``` sh
 $ kubectl get pod -n kube-system
 $ kubectl logs -n kube-system squid-XXXXXXXX
+...
+2022/08/31 07:12:14| 192.168.13.79 TCP_TUNNEL/200 46966 CONNECT www.tis.co.jp:443 - HIER_DIRECT/163.44.161.163 -
+2022/08/31 07:13:05| 192.168.13.79 TCP_DENIED/403 3867 CONNECT www.google.com:443 - HIER_NONE/- text/html
 ```

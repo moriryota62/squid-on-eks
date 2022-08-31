@@ -13,7 +13,7 @@ provider "aws" {
   region = "ap-northeast-1"
   default_tags {
     tags = {
-      pj    = "squid"
+      pj    = "mirror"
       env   = "dev"
       owner = "mori"
     }

@@ -1,4 +1,4 @@
-base_name               = "squid"
+base_name               = "mirror-dev"
 eks_version             = "1.23"
 endpoint_private_access = true
 endpoint_public_access  = true
