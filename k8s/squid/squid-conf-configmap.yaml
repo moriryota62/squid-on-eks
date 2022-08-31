@@ -49,8 +49,7 @@ data:
     cache_mem 0 MB # メモリ圧迫させたくないのでcacheしない
     cache_store_log none # cacheしない場合はlogging必要なし
 
-    # access.logのフォーマット（ローカル時間 送信元IP リクエストステータス レスポンスサイズ リクエストメソッド リクエストURL ユーザ名 階層コード コンテンツタイプ）
-    # logformat log %tl %>a %Ss/%03>Hs %<st %rm %ru %[un %Sh/%<a %mt
+    # access.logのフォーマット
     logformat log %{%Y/%m/%d %H:%M:%S}tl| %>a %Ss/%03>Hs %<st %rm %ru %[un %Sh/%<a %mt
     
     # LBのヘルスチェック等、リクエストのないものをログから除外する
