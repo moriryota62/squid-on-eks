@@ -89,13 +89,13 @@ $ kubectl run nginx --image=nginx -n kube-system -l app=squid
 $ kubectl exec -it nginx -n kube-system -- /bin/sh
 ```
 
-3. 以下のようにプロキシを指定してcurlを実行します。whitelistで許可したドメインには問題なくアクセスできます。
+3. 以下のようにプロキシを指定してcurlを実行します。-xオプションでプロキシを指定します。whitelistで許可したドメインには問題なくアクセスできます。
 
 ``` sh
 > curl https://www.tis.co.jp -x http://k8s-kubesyst-squid-9805ffda40-3605941818c5eae9.elb.ap-northeast-1.amazonaws.com:3128
 ```
 
-4. 以下のようにプロキシを指定してcurlを実行します。whitelistで許可していないドメインにはアクセスできません。
+4. 以下のようにプロキシを指定してcurlを実行します。-xオプションでプロキシを指定します。whitelistで許可していないドメインにはアクセスできません。
 
 ``` sh
 > curl https://www.google.com -x http://k8s-kubesyst-squid-9805ffda40-3605941818c5eae9.elb.ap-northeast-1.amazonaws.com:3128
